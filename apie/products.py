@@ -46,6 +46,18 @@ def create_product():
     if not product['product_name']:
         return jsonify({'message': "Name can not be empty"}), 400
 
+    if not product['id']:
+        return jsonify({'message':"id is missing"}), 400
+
+    if not product['price']:
+        return jsonify({'message':"price is missing"}),400
+
+    if not product['quantity']:
+        return jsonify({'message':"quantity is missing"}), 400
+
+    if not product['category']:
+        return jsonify({'message':"category is missing"}),400
+
     data = products.append(product)
     return jsonify({'data': products, 'message': "succesfully added"}), 201
 
@@ -107,6 +119,21 @@ def create_sales():
 
     if not sale['sales_name']:
         return jsonify({'message': "Name can not be empty"}), 400
+
+    if not sale['id']:
+        return jsonify({'message':"id is missing"}), 400
+
+    if not sale['price']:
+        return jsonify({'message':"price is missing"}),400
+
+    if not sale['quantity']:
+        return jsonify({'message':"quantity is missing"}), 400
+
+    if not sale['category']:
+        return jsonify({'message':"category is missing"}),400
+
+    if not sale['total']:
+        return jsonify({'message': "total is missing"}), 400
     
     data = sales.append(sale)
     return jsonify({'data': sales, 'message': "succesfully added"}), 201
