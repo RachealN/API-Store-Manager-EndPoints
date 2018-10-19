@@ -106,7 +106,7 @@ class TestStore(unittest.TestCase):
         delete = {
             "id": 1,
             "product_name": "car",
-            "price": "$500.00",
+            "price": "$5000.00",
             "quantity": 600,
             "category": "Electronics"
         }
@@ -118,6 +118,60 @@ class TestStore(unittest.TestCase):
 
         delete_list.append(delete)
         self.assertEqual(result.status_code, 405)
+
+    def test_add_product_with_empty_id(self):
+
+        result = self.client.post("/api/v1/orders", data=json.dumps(
+            dict(id="", product_name="car", price="$5000.00", quantity="600",
+                 category="Electronics")), content_type='application/json')
+
+        reply = json.loads(result.data)
+        self.assertEqual(result.status_code, 404)
+
+    def test_add_product_with_empty_product_name(self):
+
+        result = self.client.post("/api/v1/orders", data=json.dumps(
+            dict(id="1", product_name="", price="$5000.00", quantity="600",
+                 category="Electronics")), content_type='application/json')
+
+        reply = json.loads(result.data)
+        self.assertEqual(result.status_code, 404)
+
+    def test_add_product_with_empty_price(self):
+
+        result = self.client.post("/api/v1/orders", data=json.dumps(
+            dict(id="1", product_name="car", price="", quantity="600",
+                 category="Electronics")), content_type='application/json')
+
+        reply = json.loads(result.data)
+        self.assertEqual(result.status_code, 404)
+
+    def test_add_product_with_empty_quantity(self):
+
+        result = self.client.post("/api/v1/orders", data=json.dumps(
+            dict(id="1", product_name="car", price="$5000.00", quantity="",
+                 category="Electronics")), content_type='application/json')
+
+        reply = json.loads(result.data)
+        self.assertEqual(result.status_code, 404)
+
+    def test_add_product_with_empty_category(self):
+
+        result = self.client.post("/api/v1/orders", data=json.dumps(
+            dict(id="1", product_name="car", price="$5000.00", quantity="600",
+                 category="")), content_type='application/json')
+
+        reply = json.loads(result.data)
+        self.assertEqual(result.status_code, 404)
+
+    def test_add_product_with_invalid_keys(self):
+
+        result = self.client.post("/api/v1/orders", data=json.dumps(
+            dict(id="1", product_name="car", price="$5000.00", quantity="600",
+                 category="Electronics")), content_type='application/json')
+
+
+    
 
     def test_add_sale(self):
 
@@ -157,3 +211,66 @@ class TestStore(unittest.TestCase):
                                   )
 
         self.assertEqual(result.status_code, 201)
+
+    def test_sales_order_with_invalid_keys(self):
+
+        result = self.client.post("/api/v1/orders", data=json.dumps(
+            dict(id="1", sales_name="wine", price="$20.00", quantity="100",
+                category="food and beverages", total="10000")), content_type='application/json')
+
+        reply = json.loads(result.data)
+        self.assertEqual(result.status_code, 404)
+
+    def test_add_sales_order_with_empty_id(self):
+
+        result = self.client.post("/api/v1/orders", data=json.dumps(
+            dict(id="", sales_name="wine", price="$20.00", quantity="100",
+                 category="food and beverages", total="10000")), content_type='application/json')
+
+        reply = json.loads(result.data)
+        self.assertEqual(result.status_code, 404)
+
+    def test_add_sales_order_with_empty_name(self):
+
+        result = self.client.post("/api/v1/orders", data=json.dumps(
+            dict(id="2", sales_name="", price="$20.00", quantity="100",
+                 category="food and beverages", total="10000")), content_type='application/json')
+
+        reply = json.loads(result.data)
+        self.assertEqual(result.status_code, 404)
+
+    def test_add_sales_order_with_empty_price(self):
+
+        result = self.client.post("/api/v1/orders", data=json.dumps(
+            dict(id="1", sales_name="wine", price="", quantity="100",
+                 category="food and beverages", total="10000")), content_type='application/json')
+
+        reply = json.loads(result.data)
+        self.assertEqual(result.status_code, 404)
+
+    def test_add_sales_order_with_empty_quantity(self):
+
+        result = self.client.post("/api/v1/orders", data=json.dumps(
+            dict(id="1", sales_name="wine", price="$20.00", quantity="",
+                 category="food and beverages", total="10000")), content_type='application/json')
+
+        reply = json.loads(result.data)
+        self.assertEqual(result.status_code, 404)
+
+    def test_add_sales_order_with_empty_category(self):
+
+        result = self.client.post("/api/v1/orders", data=json.dumps(
+            dict(id="1", sales_name="wine", price="$20.00", quantity="100",
+                 category="", total="10000")), content_type='application/json')
+
+        reply = json.loads(result.data)
+        self.assertEqual(result.status_code, 404)
+
+    def test_add_sales_order_with_empty_total(self):
+
+        result = self.client.post("/api/v1/orders", data=json.dumps(
+            dict(id="1", sales_name="wine", price="$20.00", quantity="100",
+                 category="food and beverages", total="")), content_type='application/json')
+
+        reply = json.loads(result.data)
+        self.assertEqual(result.status_code, 404)
