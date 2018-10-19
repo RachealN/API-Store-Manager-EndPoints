@@ -160,8 +160,6 @@ def sales_id(pk):
 
 
 
-if __name__ == "__main__":
-    app.run()
 
                                                                                                                                                                                                                                                                                                                                     
 
