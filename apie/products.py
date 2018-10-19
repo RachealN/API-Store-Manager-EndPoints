@@ -158,9 +158,6 @@ def sales_id(pk):
     else:
         return jsonify({"message": "The sales with that id was not found"})
 
-
-
-
                                                                                                                                                                                                                                                                                                                                     
 
 
