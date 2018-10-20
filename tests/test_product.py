@@ -8,6 +8,27 @@ from apie.products import app
 class TestStore(unittest.TestCase):
     def setUp(self):
         self.client = app.test_client()
+        self.product = {
+            "id": 1,
+            "product_name": "car",
+            "price": "$500.00",
+            "quantity": 600,
+            "category": "Electronics"
+        }
+
+        self.sale = {
+            "id": 1,
+            "sales_name": "wine",
+            "price": "$200.00",
+            "quantity": 1000,
+            "category": "food and Beverages",
+            "total": "$20000"
+        }
+
+    def tearDown(self):
+        self.sale = None
+        self.product = None
+        self.app = None
 
     def test_base_url(self):
         response = self.client.get('/')
@@ -29,6 +50,26 @@ class TestStore(unittest.TestCase):
 
         self.assertEqual(result.status_code, 201)
         self.assertIsNotNone(result)
+
+    def test_new_product_has_all_feilds(self):
+       product = {
+           "id": 1,
+           "product_name": "",
+           "price": "",
+           "quantity": 600,
+           "category": "Electronics"
+       }
+       result = self.client.post('/api/v2/resources/product/',
+                                 content_type='application/json',
+                                 data=json.dumps(product)
+                                 )
+
+       self.assertEqual(result.status_code, 400)
+       self.assertIsNotNone(result)
+
+       
+
+       
 
     def test_get_all_products(self):
         result = self.client.get('/api/v2/resources/products/all')
@@ -127,6 +168,7 @@ class TestStore(unittest.TestCase):
 
         reply = json.loads(result.data)
         self.assertEqual(result.status_code, 404)
+        self.assertTrue(b'id is missing', reply)
 
     def test_add_product_with_empty_product_name(self):
 
@@ -136,6 +178,7 @@ class TestStore(unittest.TestCase):
 
         reply = json.loads(result.data)
         self.assertEqual(result.status_code, 404)
+        self.assertTrue(b'product_name is missing', reply)
 
     def test_add_product_with_empty_price(self):
 
@@ -145,6 +188,7 @@ class TestStore(unittest.TestCase):
 
         reply = json.loads(result.data)
         self.assertEqual(result.status_code, 404)
+        self.assertTrue(b'price is missing', reply)
 
     def test_add_product_with_empty_quantity(self):
 
@@ -154,7 +198,8 @@ class TestStore(unittest.TestCase):
 
         reply = json.loads(result.data)
         self.assertEqual(result.status_code, 404)
-
+        self.assertTrue(b'quantity is missing',reply)
+        
     def test_add_product_with_empty_category(self):
 
         result = self.client.post("/api/v1/orders", data=json.dumps(
@@ -163,12 +208,17 @@ class TestStore(unittest.TestCase):
 
         reply = json.loads(result.data)
         self.assertEqual(result.status_code, 404)
+        self.assertTrue(b'category is missing', reply)
 
     def test_add_product_with_invalid_keys(self):
 
         result = self.client.post("/api/v1/orders", data=json.dumps(
             dict(id="1", product_name="car", price="$5000.00", quantity="600",
                  category="Electronics")), content_type='application/json')
+
+        reply = json.loads(result.data)
+        self.assertEqual(result.status_code, 404)
+        self.assertTrue(b'category is missing', reply)
 
 
     
@@ -184,13 +234,32 @@ class TestStore(unittest.TestCase):
             "total": "$20000"
         }
 
-        result = self.client.post('/api/v2/resources/order/',
+        result = self.client.post('/api/v2/resources/sale/',
                                   content_type='application/json',
                                   data=json.dumps(sale)
                                   )
 
-        self.assertEqual(result.status_code, 404)
+        self.assertEqual(result.status_code, 201)
         self.assertIsNotNone(result)
+
+    def test_sale_has_all_feilds(self):
+        sale = {
+            "id": 1,
+            "sales_name": "",
+            "price": "$200.00",
+            "quantity": 1000,
+            "category": "food and Beverages",
+            "total": ""
+        }
+        result = self.client.post('/api/v2/resources/sale/',
+                                  content_type='application/json',
+                                  data=json.dumps(sale)
+                                  )
+
+        self.assertEqual(result.status_code, 400)
+        self.assertIsNotNone(result)
+
+       
 
     def test_get_all_sales(self):
         result = self.client.get('/api/v2/resources/sale/all')
@@ -212,6 +281,23 @@ class TestStore(unittest.TestCase):
 
         self.assertEqual(result.status_code, 201)
 
+    def test_get_single_sale_or_product(self):
+        result = self.client.get('/api/v2/resources/sales/1')
+        self.assertEqual(result.status_code, 301)
+        result = self.client.get('/api/v2/resources/products/1')
+        self.assertEqual(result.status_code, 301)
+
+    def test_get_single_sale_or_product_that_doesnot_exist(self):
+        result = self.client.get('/api/v2/resources/sales/1')
+        self.assertEqual(result.status_code, 301)
+        
+        
+        result = self.client.get('/api/v2/resources/products/1')
+        self.assertEqual(result.status_code, 301)
+
+
+    
+
     def test_sales_order_with_invalid_keys(self):
 
         result = self.client.post("/api/v1/orders", data=json.dumps(
@@ -220,6 +306,7 @@ class TestStore(unittest.TestCase):
 
         reply = json.loads(result.data)
         self.assertEqual(result.status_code, 404)
+        self.assertTrue(b'Your sales order has invalid keys', reply)
 
     def test_add_sales_order_with_empty_id(self):
 
@@ -229,6 +316,7 @@ class TestStore(unittest.TestCase):
 
         reply = json.loads(result.data)
         self.assertEqual(result.status_code, 404)
+        self.assertTrue(b'id is missing', reply)
 
     def test_add_sales_order_with_empty_name(self):
 
@@ -238,6 +326,7 @@ class TestStore(unittest.TestCase):
 
         reply = json.loads(result.data)
         self.assertEqual(result.status_code, 404)
+        self.assertTrue(b'name is missing', reply)
 
     def test_add_sales_order_with_empty_price(self):
 
@@ -247,6 +336,7 @@ class TestStore(unittest.TestCase):
 
         reply = json.loads(result.data)
         self.assertEqual(result.status_code, 404)
+        self.assertTrue(b'price is missing', reply)
 
     def test_add_sales_order_with_empty_quantity(self):
 
@@ -256,6 +346,7 @@ class TestStore(unittest.TestCase):
 
         reply = json.loads(result.data)
         self.assertEqual(result.status_code, 404)
+        self.assertTrue(b'quantity is missing', reply)
 
     def test_add_sales_order_with_empty_category(self):
 
@@ -265,6 +356,7 @@ class TestStore(unittest.TestCase):
 
         reply = json.loads(result.data)
         self.assertEqual(result.status_code, 404)
+        self.assertTrue(b'category is missing', reply)
 
     def test_add_sales_order_with_empty_total(self):
 
@@ -274,3 +366,4 @@ class TestStore(unittest.TestCase):
 
         reply = json.loads(result.data)
         self.assertEqual(result.status_code, 404)
+        self.assertTrue(b'total is missing', reply)
