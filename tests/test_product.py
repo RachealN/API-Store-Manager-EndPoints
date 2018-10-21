@@ -31,8 +31,9 @@ class TestStore(unittest.TestCase):
         self.app = None
 
     def test_base_url(self):
-        response = self.client.get('/')
-        self.assertEqual(response.status_code, 200)
+        result = self.client.get('/')
+        self.assertEqual(result.status_code, 200)
+        self.assertTrue(b'base url', result)
 
     def test_add_product(self):
         product = {
@@ -49,7 +50,7 @@ class TestStore(unittest.TestCase):
                                   )
 
         self.assertEqual(result.status_code, 201)
-        self.assertIsNotNone(result)
+        self.assertTrue(b'product added', result)
 
     def test_new_product_has_all_feilds(self):
        product = {
@@ -65,7 +66,7 @@ class TestStore(unittest.TestCase):
                                  )
 
        self.assertEqual(result.status_code, 400)
-       self.assertIsNotNone(result)
+       self.assertTrue(b'product has all fields', result)
 
        
 
@@ -74,6 +75,7 @@ class TestStore(unittest.TestCase):
     def test_get_all_products(self):
         result = self.client.get('/api/v2/resources/products/all')
         self.assertEqual(result.status_code, 200)
+        self.assertTrue(b'get all products succesful', result)
 
     def test_add_single_product(self):
         product = {
@@ -89,10 +91,12 @@ class TestStore(unittest.TestCase):
                                   )
 
         self.assertEqual(result.status_code, 201)
+        self.assertTrue(b'product added succesfully', result)
 
     def test_unavailable_fetch(self):
         result = self.client.get('/api/v2/resources/products/')
         self.assertEqual(result.status_code, 404)
+        self.assertIsNotNone(result)
 
     def test_product_updated(self):
         product = {
@@ -107,7 +111,7 @@ class TestStore(unittest.TestCase):
                                  )
 
         self.assertEqual(result.status_code, 405)
-        self.assertIsNotNone(result)
+        self.assertTrue(b'product updated', result)
 
     def test_invalid_update(self):
         product_list = []
@@ -126,6 +130,7 @@ class TestStore(unittest.TestCase):
 
         product_list.append(product)
         self.assertEqual(result.status_code, 201)
+        self.assertTrue(b'invalid update', result)
 
         update = {
             "product_name": "fridge",
@@ -141,6 +146,7 @@ class TestStore(unittest.TestCase):
                                  data=json.dumps(dict_name))
 
         self.assertEqual(result.status_code, 400)
+        self.assertTrue(b'product updated', result)
 
     def test_entry_deleted(self):
         delete_list = []
@@ -159,6 +165,7 @@ class TestStore(unittest.TestCase):
 
         delete_list.append(delete)
         self.assertEqual(result.status_code, 405)
+        self.assertTrue(b'product deleted', result)
 
     def test_add_product_with_empty_id(self):
 
@@ -218,7 +225,7 @@ class TestStore(unittest.TestCase):
 
         reply = json.loads(result.data)
         self.assertEqual(result.status_code, 404)
-        self.assertTrue(b'category is missing', reply)
+        self.assertTrue(b'invalid keys', reply)
 
 
     
@@ -264,6 +271,7 @@ class TestStore(unittest.TestCase):
     def test_get_all_sales(self):
         result = self.client.get('/api/v2/resources/sale/all')
         self.assertEqual(result.status_code, 404)
+        self.assertIsNotNone(result)
 
     def test_add_single_sale(self):
         sale = {
@@ -280,20 +288,26 @@ class TestStore(unittest.TestCase):
                                   )
 
         self.assertEqual(result.status_code, 201)
+        self.assertIsNotNone(result)
 
     def test_get_single_sale_or_product(self):
         result = self.client.get('/api/v2/resources/sales/1')
         self.assertEqual(result.status_code, 301)
+        self.assertIsNotNone(result)
+
         result = self.client.get('/api/v2/resources/products/1')
         self.assertEqual(result.status_code, 301)
+        self.assertIsNotNone(result)
 
     def test_get_single_sale_or_product_that_doesnot_exist(self):
         result = self.client.get('/api/v2/resources/sales/1')
         self.assertEqual(result.status_code, 301)
+        self.assertIsNotNone(result)
         
         
         result = self.client.get('/api/v2/resources/products/1')
         self.assertEqual(result.status_code, 301)
+        self.assertIsNotNone(result)
 
 
     
