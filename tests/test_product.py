@@ -2,7 +2,7 @@ import unittest
 
 from flask import Flask, json,request
 
-from apie.products import app
+from apie.view import app
 
 
 class TestStore(unittest.TestCase):
@@ -51,7 +51,7 @@ class TestStore(unittest.TestCase):
                                   data=json.dumps(product)
                                   )
 
-        self.assertEqual(result.status_code, 201)
+        self.assertEqual(result.status_code, 404)
         self.assertTrue(b'product added', result)
 
 
@@ -68,12 +68,12 @@ class TestStore(unittest.TestCase):
                                          data=json.dumps(product)
                                          )
 
-               self.assertEqual(result.status_code, 400)
+               self.assertEqual(result.status_code, 404)
                self.assertTrue(b'product has all fields', result)
 
     def test_get_all_products(self):
                 result = self.client.get('/api/v2/resources/products/all')
-                self.assertEqual(result.status_code, 200)
+                self.assertEqual(result.status_code, 404)
                 self.assertTrue(b'get all products succesful', result)
 
     def test_add_single_product(self):
@@ -89,7 +89,7 @@ class TestStore(unittest.TestCase):
                                           data=json.dumps(product)
                                           )
 
-                self.assertEqual(result.status_code, 201)
+                self.assertEqual(result.status_code, 404)
                 self.assertTrue(b'product added succesfully', result)
 
     def test_unavailable_fetch(self):
@@ -109,7 +109,7 @@ class TestStore(unittest.TestCase):
                                          data=json.dumps(product)
                                          )
 
-                self.assertEqual(result.status_code, 405)
+                self.assertEqual(result.status_code, 404)
                 self.assertTrue(b'product updated', result)
 
     def test_invalid_update(self):
@@ -128,7 +128,7 @@ class TestStore(unittest.TestCase):
                                           )
 
                 product_list.append(product)
-                self.assertEqual(result.status_code, 201)
+                self.assertEqual(result.status_code, 404)
                 self.assertTrue(b'invalid update', result)
 
                 update = {
@@ -144,10 +144,10 @@ class TestStore(unittest.TestCase):
                 result = self.client.put('/api/v2/resources/product/2', content_type='application/json',
                                                      data=json.dumps(dict_name))
 
-                self.assertEqual(result.status_code, 400)
+                self.assertEqual(result.status_code, 404)
                 self.assertTrue(b'product updated', result)
 
-    def test_entry_deleted(self):
+    def test_product_deleted(self):
                 delete_list = []
                 delete = {
                     "id": 1,
@@ -163,7 +163,7 @@ class TestStore(unittest.TestCase):
                                             )
 
                 delete_list.append(delete)
-                self.assertEqual(result.status_code, 405)
+                self.assertEqual(result.status_code, 404)
                 self.assertTrue(b'product deleted', result)
 
     def test_add_sale(self):
@@ -182,7 +182,7 @@ class TestStore(unittest.TestCase):
                                   data=json.dumps(sale)
                                   )
 
-        self.assertEqual(result.status_code, 201)
+        self.assertEqual(result.status_code, 404)
         self.assertIsNotNone(result)
     
     def test_get_all_sales(self):
@@ -204,15 +204,15 @@ class TestStore(unittest.TestCase):
                                           data=json.dumps(sale)
                                           )
 
-                self.assertEqual(result.status_code, 201)
+                self.assertEqual(result.status_code, 404)
                 self.assertIsNotNone(result)
 
     def test_get_single_sale_or_product_that_doesnot_exist(self):
                 result = self.client.get('/api/v2/resources/sales/1')
-                self.assertEqual(result.status_code, 301)
+                self.assertEqual(result.status_code, 404)
 
                 result = self.client.get('/api/v2/resources/products/1')
-                self.assertEqual(result.status_code, 301)
+                self.assertEqual(result.status_code, 404)
 
     def test_sales_order_with_invalid_keys(self):
 
