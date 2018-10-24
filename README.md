@@ -3,10 +3,11 @@
 [![Maintainability](https://api.codeclimate.com/v1/badges/0ac41a5a5c76fbb23519/maintainability)](https://codeclimate.com/github/RachealN/API-Store-Manager-EndPoints/maintainability)
 
 
-#TITLE
+***TITLE***
+ 
  API-Store-Manager
 
-#PREREQUISITES
+***PREREQUISITES***
 
 Requirements
 
@@ -18,7 +19,7 @@ install using pip
 ```pip install Flask-API```
 
 
-#API ENDPOINTS
+***API ENDPOINTS***
 
 ***Admin can add a product***'/api/v2/resources/product/'
 
@@ -35,13 +36,13 @@ install using pip
 ***Admin can delete the product***'/api/v2/resources/product/<int:product_id>'
 
 
-#RUNNING TESTS
+***RUNNING TESTS***
 
 Run ```pytest``` in the commandline
 
 Do ```pip install pytest``` to install it
 
-#DEPLOYMENT
+***DEPLOYMENT***
 
 This app is deployed on heroku, how to get started on deploying on heroku
 
@@ -57,5 +58,5 @@ This app is deployed on heroku, how to get started on deploying on heroku
 
 
 
-#AUTHOR
+***AUTHOR***
 NAMAARA RACHEAL
