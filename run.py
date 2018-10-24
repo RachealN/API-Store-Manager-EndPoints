@@ -1,4 +1,6 @@
-from apie.products import app
+from apie.view import app
+from apie.models import model
+
 
 
 

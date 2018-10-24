@@ -1,11 +1,27 @@
 from flask import Flask, request, jsonify, abort, make_response
+from apie.models.model import Product, Sale, Admin, StoreAttendant
+from flask_httpauth import HTTPBasicAuth
 
 
 app = Flask(__name__)
 app.config["DEBUG"] = True
+auth = HTTPBasicAuth()
+
+
 
 products = []
 sales = []
+
+
+@auth.get_password
+def get_password(username):
+    if username == 'Racheal':
+        return 'rac'
+    return None
+
+@auth.error_handler
+def unauthorized():
+    return make_response(jsonify({'error':'unauthorized access'}),400)
 
 
 @app.route('/', methods=['GET'])
@@ -33,7 +49,8 @@ def not_found(error):
     return make_response(jsonify({'error': 'product not found'}), 404)
 
 
-@app.route('/api/v2/resources/product/', methods=['POST'])
+@app.route('/api/v1/product/', methods=['POST'])
+# @auth.login_required
 def create_product():
     product = {
         'id': request.json['id'] + 1,
@@ -48,15 +65,17 @@ def create_product():
 
 
     data = products.append(product)
-    return jsonify({'data': products, 'message': "succesfully added"}), 201
+    return jsonify({'data': product, 'message': "succesfully added"}), 201
 
 
-@app.route('/api/v2/resources/products/all', methods=['GET'])
+@app.route('/api/v1/products/all', methods=['GET'])
+# @auth.login_required
 def products_all():
     return jsonify(products)
 
 
-@app.route('/api/v2/resources/products/<pk>/', methods=['GET'])
+@app.route('/api/v1/products/<pk>/', methods=['GET'])
+# @auth.login_required
 def products_id(pk):
     try:
         int(pk)
@@ -71,9 +90,9 @@ def products_id(pk):
         return jsonify({"message": "The product with that id was not found"})
 
 
-@app.route('/api/v2/resources/product/<int:product_id>', methods=['PUT'])
+@app.route('/api/v1/product/<int:product_id>', methods=['PUT'])
+# @auth.login_required
 def update_product(product_id):
-
     product = [product for product in products if int(
         product['id']) == int(product_id)]
     product[0]['name'] = request.json.get('name')
@@ -86,7 +105,8 @@ def update_product(product_id):
     return jsonify({'data': product, 'message': "succesfully updated"}), 200
 
 
-@app.route('/api/v2/resources/product/<int:product_id>', methods=['DELETE'])
+@app.route('/api/v1/product/<int:product_id>', methods=['DELETE'])
+# @auth.login_required
 def delete_product(product_id):
     product = [product for product in products if int(
         product['id']) == int(product_id)]
@@ -95,28 +115,33 @@ def delete_product(product_id):
     products.remove(product[0])
     return jsonify({'message': "succesfully deleted"})
 
-@app.route('/api/v2/resources/sale/', methods=['POST'])
+
+@app.route('/api/v1/sale/', methods=['POST'])
+# @auth.login_required
 def create_sales():
     sale = {
         'id': request.json['id'] + 1,
-        'sales_name': request.json['sales_name'],
+        'sale_name': request.json['sale_name'],
         'price': request.json['price'],
         'quantity': request.json['quantity'],
         'category': request.json['category'],
         'total':request.json['total']
     }
+    if not sale['sale_name']:
+        return jsonify({'message': "Name can not be empty"}), 400
 
-    
     data = sales.append(sale)
     return jsonify({'data': sales, 'message': "succesfully added"}), 201
 
 
-@app.route('/api/v2/resources/sales/all', methods=['GET'])
+@app.route('/api/v1/sales/all', methods=['GET'])
+# @auth.login_required
 def sales_all():
     return jsonify(sales)
 
 
-@app.route('/api/v2/resources/sales/<pk>/', methods=['GET'])
+@app.route('/api/v1/sales/<pk>/', methods=['GET'])
+# @auth.login_required
 def sales_id(pk):
     try:
         int(pk)
