@@ -3,22 +3,23 @@
 [![Maintainability](https://api.codeclimate.com/v1/badges/0ac41a5a5c76fbb23519/maintainability)](https://codeclimate.com/github/RachealN/API-Store-Manager-EndPoints/maintainability)
 
 
-TITLE
-# API-Store-Manager
+#TITLE
+ API-Store-Manager
 
-PREREQUISITES
+#PREREQUISITES
 
 Requirements
 
-```-Python 2.7+ or 3.3+
--Flask 0.10+```
+-Python 2.7+ or 3.3+
+-Flask 0.10+
 
 Installation
-install using ```pip```
+install using pip
 ```pip install Flask-API```
 
 
 #API ENDPOINTS
+
 ***Admin can add a product***'/api/v2/resources/product/'
 
 ***Admin/store attendant can get all products***'/api/v2/resources/products/all'
@@ -34,13 +35,15 @@ install using ```pip```
 ***Admin can delete the product***'/api/v2/resources/product/<int:product_id>'
 
 
-RUNNING TESTS
+#RUNNING TESTS
+
 Run ```pytest``` in the commandline
 
 Do ```pip install pytest``` to install it
 
-DEPLOYMENT
-This app is deployed on heroku
+#DEPLOYMENT
+
+This app is deployed on heroku, how to get started on deploying on heroku
 
 ```-install Heroku CLI 
 -pip install gunicorn
@@ -54,5 +57,5 @@ This app is deployed on heroku
 
 
 
-AUTHOR
+#AUTHOR
 NAMAARA RACHEAL
