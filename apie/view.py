@@ -1,11 +1,11 @@
 from flask import Flask, request, jsonify, abort, make_response
 from apie.models.model import Product, Sale, Admin, StoreAttendant
-from flask_httpauth import HTTPBasicAuth
+# from flask_httpauth import HTTPBasicAuth
 
 
 app = Flask(__name__)
 app.config["DEBUG"] = True
-auth = HTTPBasicAuth()
+# auth = HTTPBasicAuth()
 
 
 
@@ -13,15 +13,15 @@ products = []
 sales = []
 
 
-@auth.get_password
-def get_password(username):
-    if username == 'Racheal':
-        return 'rac'
-    return None
+# @auth.get_password
+# def get_password(username):
+#     if username == 'Racheal':
+#         return 'rac'
+#     return None
 
-@auth.error_handler
-def unauthorized():
-    return make_response(jsonify({'error':'unauthorized access'}),400)
+# @auth.error_handler
+# def unauthorized():
+#     return make_response(jsonify({'error':'unauthorized access'}),400)
 
 
 @app.route('/', methods=['GET'])
