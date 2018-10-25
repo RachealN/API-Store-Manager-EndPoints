@@ -37,7 +37,7 @@ class TestStore(unittest.TestCase):
 
 
 
-    def test_add_product(self):
+    def test_add_product_successfully(self):
         product = {
                     "id": 1,
                     "product_name": "car",
@@ -46,13 +46,13 @@ class TestStore(unittest.TestCase):
                     "category": "Electronics"
                     }
             
-        result = self.client.post('/api/v2/resources/product/',
-                                  content_type='application/json',
-                                  data=json.dumps(product)
-                                  )
+        post_product = self.client.post('/api/v1/products',
+                                        content_type='application/json',
+                                        data=json.dumps(self.product)
+                                        )
+        self.assertEqual(post_product.status_code, 404)
+        self.client.delete('/api/v1/products/1')
 
-        self.assertEqual(result.status_code, 404)
-        self.assertTrue(b'product added', result)
 
 
     def test_new_product_has_all_feilds(self):
@@ -223,3 +223,6 @@ class TestStore(unittest.TestCase):
                 reply = json.loads(result.data)
                 self.assertEqual(result.status_code, 404)
                 self.assertTrue(b'Your sales order has invalid keys', reply)
+                self.client.delete('/api/v1/products/1')
+
+    
