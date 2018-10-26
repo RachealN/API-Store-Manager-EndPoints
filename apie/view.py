@@ -8,18 +8,20 @@ app.config["DEBUG"] = True
 # auth = HTTPBasicAuth()
 
 
+
 products = []
 sales = []
 
 
 @app.route('/', methods=['GET'])
 def home():
-    return ('Welcome to Store Manager'), 200
+    return ('Welcome to Store Manager'),200
 
 
 @app.errorhandler(405)
 def url_not_found(error):
     return jsonify({'message': 'Requested method not allowed'}), 405
+
 
 
 @app.route('/api/v1/product/', methods=['POST'])
@@ -34,6 +36,7 @@ def create_product():
 
     if not product['product_name']:
         return jsonify({'message': "Name can not be empty"}), 400
+
 
     data = products.append(product)
     return jsonify({'data': product, 'message': "succesfully added"}), 201
@@ -91,7 +94,7 @@ def create_sales():
         'price': request.json['price'],
         'quantity': request.json['quantity'],
         'category': request.json['category'],
-        'total': request.json['total']
+        'total':request.json['total']
     }
     if not sale['sale_name']:
         return jsonify({'message': "Name can not be empty"}), 400
@@ -117,4 +120,9 @@ def sales_id(pk):
             return jsonify(dict)
 
     else:
-        return jsonify({"message": "The sales with that id was not found"})
+        return jsonify({"message": "The sale with that id was not found"})
+
+                                                                                                                                                                                                                                                                                                                                    
+
+
+
