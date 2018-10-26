@@ -1,59 +1,74 @@
 
 
 class Product:
-    def __init__(self, id, product_name, price=int, quantity=int):
-        self.id = id
-        self.product_name = product_name
-        self.price = price
-        self.quantity = quantity
+    def __init__(self):
+          self.products = []
+    
 
     def get_product(self):
-        return{
-            "id": self.id,
-            "product_name": self.product_name,
-            "price": self.price,
-            "quantity": self.quantity
-        }
+        return self.products
 
+    def get_one_product(self, id):
+        for item in self.products:
+            if item['id'] == id:
+                return item
 
+    def get_product_name(self,product_name):
+        for item in self.products:
+            if item['product_name'] == product_name:
+                return item
+       
+        
 class Sale:
-    def __init__(self, id, sale_name, price, quantity, total):
-        self.id = id
-        self.sale_name = sale_name
-        self.price = price
-        self.quantity = quantity
-        self.total = total
+    def __init__(self):
+        self.sales = []
 
     def get_sale(self):
-        return{
-            "id": self.id,
-            "sale_name": self.sale_name,
-            "price": self.price,
-            "quantity": self.quantity,
-            "total": self.total
-        }
+        return self.sales
+
+    def get_single_sale(self,sale_name):
+        for item in self.sales:
+            if item['sale_name'] == sale_name:
+                return item
 
 
 class StoreUsers():
-    def __init__(self, users_id, username, password, store_name):
-        self.users_id = users_id,
-        self.username = username,
-        self.password = password,
-        self.store_name = store_name
+    def __init__(self):
+        self.users = []
         
 
 class Admin(StoreUsers):
-    def __init__(self, store_name, username, password):
-        super().__init__(store_name, username,password)
-        self.store_name = store_name
-        self.username = username
-        self.password = password
+    def __init__(self):
+        self.users = []
+
+    def get_admin_user_id(self,user_id):
+        for user in self.users:
+            if user['user_id'] == user_id:
+                return user
+
+    def get_admin_username(self,username):
+        for user in self.users:
+            if user['username'] == username:
+                return user
+
+    def get_admin_pasword(self,password):
+        for user in self.users:
+            if user['password'] == password:
+                return user
 
 class StoreAttendant(StoreUsers):
-    def __init__(self,users_id, username, password):
-        super().__init__(users_id, username, password)
-        self.users_id = users_id
-        self.username = username
-        self.password = password
+    def __init__(self, username):
+        self.users = []
+
+    def get_attendant_username(self,username):
+        for user in self.users:
+            if user['username'] == username:
+                return user
+
+    def get_attendant_password(self,password):
+        for user in self.users:
+            if user['password'] == password:
+                return user
+       
 
         
