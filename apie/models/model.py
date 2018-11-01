@@ -1,74 +1,82 @@
+from flask import json, request, abort,jsonify
 
+users = []
 
 class Product:
     def __init__(self):
-          self.products = []
-    
+        self.products = []
 
-    def get_product(self):
+    def add_product(self):
+        self.products.append({
+          'id':len(self.products) +1,
+          'product_name': request.json['product_name'],
+          'price': request.json['price'],
+          'quantity': request.json['quantity'],
+          'category': request.json['category']  
+        })
+
+    def get_all_products(self):
         return self.products
 
-    def get_one_product(self, id):
-        for item in self.products:
-            if item['id'] == id:
-                return item
+    def get_a_single_product_by_id(self, id):
+        product=[product for product in self.products if product['id']==id]
+        if len(product)==0:
+            abort(404)
+            return product[0]
 
-    def get_product_name(self,product_name):
-        for item in self.products:
-            if item['product_name'] == product_name:
-                return item
-       
-        
+
 class Sale:
     def __init__(self):
         self.sales = []
 
-    def get_sale(self):
+    def add_order(self):
+        self.sales.append({
+            'sale_id':len(self.sales) + 1,
+            'sale_name':request.json['sale_name'],
+            'price': request.json['price'],
+            'quantity':request.json['quantity'],
+            'category':request.json['category'],
+            'total':request.json['total']
+        })
+
+    def get_all_orders(self):
         return self.sales
 
-    def get_single_sale(self,sale_name):
-        for item in self.sales:
-            if item['sale_name'] == sale_name:
-                return item
+    def get_a_single_order_with_id(self,id):
+         for sale in self.sales:
+            if sale['sale_id'] == id:
+                self.sales.append(sale)
 
+    def delete_order_with_id(self,id):
+        for sale in self.sales:
+            if sale['sale_id'] == id:
+                self.sales.remove(sale)
 
-class StoreUsers():
-    def __init__(self):
-        self.users = []
+    def delete_all_orders(self):
+        self.sales.remove(Sale)
         
 
-class Admin(StoreUsers):
-    def __init__(self):
-        self.users = []
+class User():
 
-    def get_admin_user_id(self,user_id):
-        for user in self.users:
-            if user['user_id'] == user_id:
-                return user
+    def __init__(self, user_id, username, password, gender):
+        self.user_id = user_id
+        self.username = username
+        self.password = password
+        self.gender = gender
 
-    def get_admin_username(self,username):
-        for user in self.users:
-            if user['username'] == username:
-                return user
+    def register(self):
+        new_user = {
+            "user_id": self.user_id,
+            "username": self.username,
+            "password": self.password,
+            "gender": self.gender
 
-    def get_admin_pasword(self,password):
-        for user in self.users:
-            if user['password'] == password:
-                return user
+        }
 
-class StoreAttendant(StoreUsers):
-    def __init__(self, username):
-        self.users = []
+        users.append(new_user)
+        return jsonify(users)
 
-    def get_attendant_username(self,username):
-        for user in self.users:
-            if user['username'] == username:
-                return user
 
-    def get_attendant_password(self,password):
-        for user in self.users:
-            if user['password'] == password:
-                return user
+
+
        
-
-        

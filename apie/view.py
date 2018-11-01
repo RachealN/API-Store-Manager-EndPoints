@@ -1,11 +1,9 @@
 from flask import Flask, request, jsonify, abort, make_response
-from apie.models.model import Product, Sale, Admin, StoreAttendant
-# from flask_httpauth import HTTPBasicAuth
+from apie.models.model import Product, Sale, User
 
 
 app = Flask(__name__)
 app.config["DEBUG"] = True
-# auth = HTTPBasicAuth()
 
 
 
@@ -38,7 +36,7 @@ def create_product():
         return jsonify({'message': "Name can not be empty"}), 400
 
 
-    data = products.append(product)
+    products.append(product)
     return jsonify({'data': product, 'message': "succesfully added"}), 201
 
 
@@ -99,7 +97,7 @@ def create_sales():
     if not sale['sale_name']:
         return jsonify({'message': "Name can not be empty"}), 400
 
-    data = sales.append(sale)
+    sales.append(sale)
     return jsonify({'data': sales, 'message': "succesfully added"}), 201
 
 
@@ -108,7 +106,7 @@ def sales_all():
     return jsonify(sales)
 
 
-@app.route('/api/v1/sales/<pk>/', methods=['GET'])
+@app.route('/api/v1/sales/<int:pk>/', methods=['GET'])
 def sales_id(pk):
     try:
         int(pk)

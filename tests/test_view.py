@@ -4,7 +4,7 @@ from flask import Flask, json, request, Response
 
 from apie.view import app
 
-from apie.models.model import Product, Sale, Admin, StoreAttendant
+from apie.models.model import Product, Sale, User
 
 
 class TestStore(unittest.TestCase):
@@ -13,15 +13,15 @@ class TestStore(unittest.TestCase):
         self.product = {
             "id": 1,
             "product_name": "car",
-            "price": "$500.00",
+            "price": 500.00,
             "quantity": 600,
             "category": "Electronics"
         }
 
         self.sale = {
             "id": 1,
-            "sales_name": "wine",
-            "price": "$200.00",
+            "sale_name": "wine",
+            "price": 200.00,
             "quantity": 1000,
             "category": "food and Beverages",
             "total": "$20000"
@@ -37,12 +37,12 @@ class TestStore(unittest.TestCase):
         product = {
             "id": 1,
             "product_name": "car",
-            "price": "$500.00",
+            "price": 500.00,
             "quantity": 600,
             "category": "Electronics"
         }
 
-        data = products.append(product)
+        products.append(product)
         result = self.client.post('/api/v1/product/',
                                   content_type='application/json',
                                   data=json.dumps(product)
@@ -95,4 +95,6 @@ class TestStore(unittest.TestCase):
 
         self.assertEqual(result.status_code, 200)
         data = json.loads(result.data.decode())
-        self.client.delete('/api/v1/sale/1')
+        self.client.delete('/api/v1/sale/all')
+
+    
